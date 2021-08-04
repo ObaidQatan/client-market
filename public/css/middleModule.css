@@ -28,3 +28,9 @@ h3{
     left: 0%;
 }
 
+@media only screen and (max-width : 464px) {
+
+h3{
+    font-size: 80%;
+}
+}

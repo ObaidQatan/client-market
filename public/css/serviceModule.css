@@ -6,6 +6,7 @@ body{
     width: 100%;
     height: 40px;
     border-radius: 10px;
+    font-size: 80%;
 }
 #totalPrice-container{
     display: inline-flex;

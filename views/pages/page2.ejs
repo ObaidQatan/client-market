@@ -38,12 +38,20 @@
             margin: 0 5px;
             color: white;
         }
+        #price-label{
+            font-size: small;
+        }
 
         @media only screen and (max-width : 464px) {
             #product-img{
                 width: 100px;
                 height: 100px;
             }
+            #price-label{
+                font-size: 50%;
+            }
+            .product-title{
+            font-size: 80%;
         }
     </style>
 </head>
@@ -54,7 +62,7 @@
     
     <section>
         <img id="product-img" src="../../../../src/product.jpeg"/>
-        <h3 style="text-align: center; font-size: small; padding: 6px; background-color: darkred; border-radius: 15px; position: absolute;">ريال&nbsp <%- available_products_2[i].price %> </h3> <h3 id="product-title" class="product-title"> <%- available_products_2[i].title %> </h3>
+        <h3 id="price-label" style="text-align: center; padding: 6px; background-color: darkred; border-radius: 15px; position: absolute;">ريال&nbsp <%- available_products_2[i].price %> </h3> <h3 id="product-title" class="product-title"> <%- available_products_2[i].title %> </h3>
 
         <h3 id="product-title" class="product-title"></h3>
         
