@@ -1,0 +1,233 @@
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+
+
+    <style>
+        body{
+            background-color: rgba(0, 0, 0, 0.178);
+            position: relative;
+            overflow: hidden;
+        }
+        #confirmation-btn{
+          transition: 0.3s;
+          position: fixed;
+          border-radius: 10px;
+          border: none;
+          background-color: rgb(0, 175, 0);
+          padding: 10px;
+          color: white;
+          font-family: cursive;
+          font-size: small;
+          width: 100px;
+          height: 40px;
+          right: 5%;
+          z-index: 1;
+        }
+        #confirmation-btn:hover{
+          transition: 0.3s;
+          background-color: green;
+        }
+    </style>
+</head>
+<body>
+
+
+<h3 id="bb" style="font-size: small; font-family: monospace; color: white;"></h3>
+<h3 id="warn" style="font-size: small; display: none; border-radius: 10px; border: solid rgb(255, 0, 55) 1px; padding: 10px; font-family: monospace; color: rgb(255, 0, 55);">
+
+</h3>
+
+
+<div id='map' style='width: 98%; height: 80%; z-index: 0; border-radius: 10px; position: absolute; margin: 10px;'></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    window.location.href = "/setLocation"
+    const LATITUDE = 13.0352764;
+    const LONGITUDE = 77.5536076;
+    const DISTANCE_CONSTANT = 1.4;
+    const MAX_DISTANCE_ALLOWED = 5100;
+    var x = document.getElementById("bb");
+    var warn = document.getElementById("warn");
+    const location_confirm_Btn = document.getElementById("confirmation-btn");
+    
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+        
+      } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+    
+    function showPosition(position) {
+       var pos = {latitude: position.coords.latitude, longitude: position.coords.longitude}
+      //use here..............................................
+
+      var mymap = L.map('map').setView([pos.latitude, pos.longitude], 18);
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          maxZoom: 18,
+          id: 'mapbox/streets-v11',
+          tileSize: 512,
+          zoomOffset: -1,
+          accessToken: 'pk.eyJ1Ijoib2Jla2FzIiwiYSI6ImNrcnNnY3gwNTBydG4ycW8wcTA1cjJoc3kifQ.g_VNZ1SUwAYu2StRnEzj_A'
+        }).addTo(mymap);
+        var marker = L.marker([pos.latitude, pos.longitude], {draggable: true}).addTo(mymap);
+
+        var draggedLatLng = marker.getLatLng();
+
+        var distanceToRoot = (L.latLng(LATITUDE, LONGITUDE).distanceTo(draggedLatLng))*DISTANCE_CONSTANT;
+
+        getAddress(draggedLatLng.lat , draggedLatLng.lng , distanceToRoot);
+
+        marker.bindPopup("<b>قم بسحب المؤشر لتحديد موقعك</b>").openPopup();
+
+        marker.on('dragend', ()=>{
+          
+          x.innerHTML = "... جار تحميل العنوان";
+          warn.style.display = "none";
+          unAllowedDistanceMajors();
+
+          draggedLatLng = marker.getLatLng();
+
+             distanceToRoot = (L.latLng(LATITUDE, LONGITUDE).distanceTo(draggedLatLng))*DISTANCE_CONSTANT;
+
+            getAddress(draggedLatLng.lat , draggedLatLng.lng , distanceToRoot);
+
+             
+             });
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //..............................................
+      
+       
+    }
+    getLocation();
+
+    
+    
+    </script>
+
+<script>
+    function getAddress(t,g , distanceToRoot){
+      const mUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${t}&lon=${g}`;
+             
+             fetch(mUrl).then(mResult =>{
+               
+               mResult.json().then(fetchedResult=>{
+                x.innerHTML = fetchedResult.display_name;
+                console.log(fetchedResult, validateDistance(distanceToRoot));
+                // if(distanceToRoot > )
+               }).catch((error)=> x.innerHTML = error);
+             }).catch((error)=> x.innerHTML = `! قم بإعادة المحاولة`);
+    }
+
+    function validateDistance(distanceToRoot){
+      if(distanceToRoot > MAX_DISTANCE_ALLOWED){warn.innerHTML = "!.. التوصيل إلى الموقع المحدد غير متاح"; warn.style.display = "block"; unAllowedDistanceMajors()}
+      else if(distanceToRoot <= MAX_DISTANCE_ALLOWED){warn.innerHTML = ""; warn.style.display = "none"; allowedDistanceMajors()}
+      return distanceToRoot;
+    }
+
+    function allowedDistanceMajors(){
+      if (document.getElementById("confirmation-btn") == null){
+        const location_confirm_Btn = document.createElement("button");
+        document.body.appendChild(location_confirm_Btn);
+        location_confirm_Btn.innerHTML = 'تأكيد الموقع';
+        location_confirm_Btn.setAttribute("id","confirmation-btn");
+        location_confirm_Btn.onclick = ()=>{localStorage.setItem("gps-token" , "NVR$44EU5RHDHHF9C&CEGQ")}
+    }
+
+    }
+
+    function unAllowedDistanceMajors(){
+      if (document.getElementById("confirmation-btn") != null){
+        document.body.removeChild(document.getElementById("confirmation-btn"));
+        localStorage.removeItem("gps-token");
+    }
+
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+//     var map = L.map('map', {
+//     center: [51.505, -0.09],
+//     zoom: 13
+// });
+
+</script>
+
+
+
+
+
+
+
+
+
+<!-- 
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoib2Jla2FzIiwiYSI6ImNrcnNnY3gwNTBydG4ycW8wcTA1cjJoc3kifQ.g_VNZ1SUwAYu2StRnEzj_A';
+var map = new mapboxgl.Map({
+container: 'map', // container ID
+style: 'mapbox://styles/mapbox/streets-v11', // style URL
+center: [77.56185599999999, 13.02528], // starting position [lng, lat]
+zoom: 9 // starting zoom
+});
+</script> -->
+</body>

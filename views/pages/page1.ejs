@@ -1,0 +1,142 @@
+<head>
+    <style>
+        body{
+            background-color: rgba(255, 255, 255, 0.048)
+        }
+        section{
+            background-color: rgba(0, 0, 0, 0.158);
+            text-align: center;
+            display: flex;
+            padding: 5px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            
+        }
+        .button{
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            background-color: yellow;
+            color: black;
+            cursor: pointer;
+        }
+        .product-title{
+            width: 50%;
+        }
+        h3{
+            margin: 0 5px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<% for (let i = 0; i < available_products.length; i++) { %>
+
+    
+    <section>
+       <h3 style="text-align: center; font-size: small; padding: 6px; background-color: darkred; border-radius: 15px;">ريال&nbsp <%- available_products[i].price %> </h3> <h3 id="product-title" class="product-title"> <%- available_products[i].title %> </h3>
+    
+    <span style="display: inline-flex; right: 5%; position: absolute;">
+        <h3 id="remove-product" class="button">-</h3>
+        <h3 id="product-quantity">0</h3>
+        <h3 id="add-product" class="button">+</h3>
+    </span>
+    </section>
+
+    <%# Ignore the errors as the app works properly, because HTML files do not recognize EJS System %>
+
+    <script>
+
+    var addProduct_Btn<%- available_products[i].id %> = document.getElementById("add-product");//add button
+    var removeProduct_Btn<%- available_products[i].id %> = document.getElementById("remove-product");//remove button
+    var productTitle<%- available_products[i].id %> =  "<%- available_products[i].title %>" ;//product title
+    var productQuantity<%- available_products[i].id %> = document.getElementById("product-quantity");//product quantity
+
+    addProduct_Btn<%- available_products[i].id %>.setAttribute("id", `add-product-${<%- available_products[i].id %>}`);//set add button id
+    removeProduct_Btn<%- available_products[i].id %>.setAttribute("id", `remove-product-${<%- available_products[i].id %>}`);//set remove button id
+    productQuantity<%- available_products[i].id %>.setAttribute("id", `product-quantity-${<%- available_products[i].id %>}`);//set product quantity id
+    
+    //=================
+    var PRODUCT_QUANTITY<%- available_products[i].id %> = 0;
+    var ID<%- available_products[i].id %> = <%- available_products[i].id %> ;
+    var addOrRemove_Counter<%- available_products[i].id %> = 0;
+    var PRICE<%- available_products[i].id %> = <%- available_products[i].price %> ;
+    var isAlreadyZero<%- available_products[i].id %>;
+    //=================
+    
+    addProduct_Btn<%- available_products[i].id %>.onclick = ()=>{
+        isAlreadyZero<%- available_products[i].id %> = false;
+        PRODUCT_QUANTITY<%- available_products[i].id %>++; addOrRemove_Counter<%- available_products[i].id %> = 1;
+        productQuantity<%- available_products[i].id %>.innerHTML = PRODUCT_QUANTITY<%- available_products[i].id %>;
+        updateProduct<%- available_products[i].id %>(addOrRemove_Counter<%- available_products[i].id %>)
+        addOrRemoveType<%- available_products[i].id %>(PRODUCT_QUANTITY<%- available_products[i].id %> , "add");
+    }
+    removeProduct_Btn<%- available_products[i].id %>.onclick = ()=>{
+        isAlreadyZero<%- available_products[i].id %> = true;
+        addOrRemove_Counter<%- available_products[i].id %> = 0;
+        if (PRODUCT_QUANTITY<%- available_products[i].id %> != 0) {isAlreadyZero<%- available_products[i].id %> = false; PRODUCT_QUANTITY<%- available_products[i].id %>--;  addOrRemove_Counter<%- available_products[i].id %> = -1};
+        productQuantity<%- available_products[i].id %>.innerHTML = PRODUCT_QUANTITY<%- available_products[i].id %>;
+        updateProduct<%- available_products[i].id %>(addOrRemove_Counter<%- available_products[i].id %>);
+        console.log(isThere<%- available_products[i].id %>(ID<%- available_products[i].id %>))
+        if(isThere<%- available_products[i].id %>(ID<%- available_products[i].id %>) == false){localStorage.removeItem(ID<%- available_products[i].id %>)};
+        addOrRemoveType<%- available_products[i].id %>(PRODUCT_QUANTITY<%- available_products[i].id %> , "remove");
+    }
+    //=================
+    
+    //=================
+    function updateProduct<%- available_products[i].id %>(addOrRemoveByOne){
+        var TOTAL_QUANTITY = parseInt(localStorage.getItem("totalQuantity"));
+        var product = {"title": `${productTitle<%- available_products[i].id %>}`, "quantity": PRODUCT_QUANTITY<%- available_products[i].id %> , "price": PRODUCT_QUANTITY<%- available_products[i].id %>*PRICE<%- available_products[i].id %>}
+        localStorage.setItem(ID<%- available_products[i].id %> , JSON.stringify(product));
+    
+        localStorage.setItem("totalQuantity" , TOTAL_QUANTITY + addOrRemoveByOne);
+        console.log(`Total Quantity: ${localStorage.getItem("totalQuantity")}`);
+    }
+    //=============
+    function isThere<%- available_products[i].id %>(someID){
+        
+        if (JSON.parse(localStorage.getItem(ID<%- available_products[i].id %>)).quantity > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //==========
+    function addOrRemoveType<%- available_products[i].id %>(productQuantityProvidedHere , keyProvidedHere){
+        var initialNumberOfTypes = parseInt(localStorage.getItem("numberOfTypesOfProducts"));
+        
+        if(productQuantityProvidedHere == 0){
+            if(!isAlreadyZero<%- available_products[i].id %>){
+                localStorage.setItem("numberOfTypesOfProducts" , initialNumberOfTypes - 1);
+            }
+        }else{
+            if(productQuantityProvidedHere == 1 && keyProvidedHere == "add"){
+                localStorage.setItem("numberOfTypesOfProducts" , initialNumberOfTypes + 1);
+            }
+        }
+    }
+    
+    
+    
+    
+    </script>
+
+<%} %>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- scripts -->
+

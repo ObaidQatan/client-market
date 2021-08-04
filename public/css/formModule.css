@@ -1,0 +1,60 @@
+
+body{
+    background-color: rgba(255, 255, 255, 0.041);
+    text-align: center;
+}
+#totalPrice-container{
+    background-color: white;
+    border-radius: 10px;
+    margin: 0 20%;
+    height: 20vh;
+    line-height: 20vh;
+}
+#totalPrice-container span{
+    padding: 0px 10px;
+    cursor: default;
+}
+#next-submit{
+    display: initial;
+    position: absolute;
+    background-color: green;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    padding: 10px;
+    bottom: 10%;
+    right: 10%;
+    cursor: pointer;
+
+    font-weight: bold;
+    
+}
+#back-submit{
+    display: none;
+    position: absolute;
+    background-color: rgb(128, 47, 0);
+    border-radius: 10px;
+    border: none;
+    color: white;
+    padding: 10px;
+    bottom: 10%;
+    left: 10%;
+    cursor: pointer;
+
+    font-weight: bold;
+    
+}
+#end-submit{
+    display: none;
+    position: absolute;
+    background-color: green;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    padding: 10px;
+    bottom: 10%;
+    right: 10%;
+    cursor: pointer;
+
+    font-weight: bold;
+}

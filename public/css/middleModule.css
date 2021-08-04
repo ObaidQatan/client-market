@@ -1,0 +1,30 @@
+body{
+    background-color: rgba(255, 255, 255, 0.055);
+    text-align: center;
+}
+h3{
+    color: white;
+    border-radius: 10px;
+    padding: 2px;
+    margin: 8px 20%;
+    background-color: rgba(0, 0, 0, 0.233);
+}
+.attractive-h3{
+    background-color: rgb(114, 16, 16);
+    margin: 8px 30%;
+    padding: 5px 2px;
+}
+#total-quantity{
+    position: absolute;
+    background-color: darkred;
+    color: white;
+    padding: 3px;
+    border-radius: 50%;
+    width: 30%;
+    height: 30%;
+    font-size: 5px;
+    font-family: cursive;
+    font-weight: bold;
+    left: 0%;
+}
+

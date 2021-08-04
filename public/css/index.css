@@ -1,0 +1,44 @@
+
+*{
+    transition: 0.3s;
+}
+body{
+    text-align: center;
+    background-color: rgb(29, 31, 32);
+}
+
+#mainContainer{
+background-color: rgba(255, 255, 255, 0.048);
+border-radius: 20px;
+height: 90vh;
+width: 100%;
+}
+#total-quantity{
+    position: absolute;
+    background-color: brown;
+    color: white;
+    padding: 3px;
+    border-radius: 50%;
+    width: 30%;
+    height: 30%;
+    font-size: 5px;
+    font-family: monospace;
+    font-weight: bold;
+    left: 0%;
+    bottom: 0%;
+}
+#cart-float{
+    display: none;
+    background-color: #d8af00;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    right: 10%;
+    bottom: 20%;
+}
+#cart-float i{
+    content: url(../src/shopping_basket_white_24dp.svg);
+    width: 70%;
+    height: 100%;
+}

@@ -1,0 +1,46 @@
+*{
+transition: 0.3s;
+}
+body{
+    text-align: center;
+}
+#hide-view-middleModule{
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: green;
+    position: absolute;
+    left: 2%;
+    top: 20%;
+    width: 30%;
+}
+#middleModule{
+    border-radius: 20px;
+    width: 100%;
+    height: 70vh;
+}
+#serviceModule{
+    border-radius: 20px;
+    width: 80%;
+    /* height: 70vh; */height: 0px;
+}
+#serviceModule_2{
+    border-radius: 20px;
+    width: 80%;
+    /* height: 70vh; */height: 0px;
+}
+#formModule{
+    border-radius: 20px;
+    width: 100%;
+    height: 20vh;
+}
+#locationModule{
+    border-radius: 20px;
+    width: 80%;
+    /* height: 70vh; */height: 0px;
+}
+#finalModule{
+    border-radius: 20px;
+    width: 90%;
+    /* height: 70vh; */height: 100vh;
+}

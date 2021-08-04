@@ -1,0 +1,163 @@
+<head>
+    <style>
+        body{
+            background-color: rgba(255, 255, 255, 0.048)
+        }
+        section{
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.158);
+             text-align: center;
+             display: flex;
+             position: relative;
+             margin-bottom: 50px;
+             height: 180px;
+             border-radius: 10px;
+        }
+        #product-img{
+            border-radius: 5px;
+             height: 150px;
+              width: 150px;
+              position: absolute;
+              left: 5%;
+        }
+        .button{
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            background-color: yellow;
+            color: black;
+            cursor: pointer;
+        }
+        .product-title{
+            width: 50%;
+            position: absolute;
+            top: 10%;
+            right: 5%;
+        }
+        h3{
+            margin: 0 5px;
+            color: white;
+        }
+
+        @media only screen and (max-width : 464px) {
+            #product-img{
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<% for (let i = 0; i < available_products_2.length; i++) { %>
+
+    
+    <section>
+        <img id="product-img" src="../../../../src/product.jpeg"/>
+        <h3 style="text-align: center; font-size: small; padding: 6px; background-color: darkred; border-radius: 15px; position: absolute;">ريال&nbsp <%- available_products_2[i].price %> </h3> <h3 id="product-title" class="product-title"> <%- available_products_2[i].title %> </h3>
+
+        <h3 id="product-title" class="product-title"></h3>
+        
+        <span style="display: inline-flex; right: 5%; bottom: 10%; position: absolute;">
+            <h3 id="remove-product" class="button">-</h3>
+            <h3 id="product-quantity">0</h3>
+            <h3 id="add-product" class="button">+</h3>
+        </span>
+    </section>
+
+    <%# Ignore the errors as the app works properly, because HTML files do not recognize EJS System %>
+
+    <script>
+
+    var addProduct_Btn<%- available_products_2[i].id %> = document.getElementById("add-product");//add button
+    var removeProduct_Btn<%- available_products_2[i].id %> = document.getElementById("remove-product");//remove button
+    var productTitle<%- available_products_2[i].id %> =  "<%- available_products_2[i].title %>" ;//product title
+    var productQuantity<%- available_products_2[i].id %> = document.getElementById("product-quantity");//product quantity
+
+    addProduct_Btn<%- available_products_2[i].id %>.setAttribute("id", `add-product-${<%- available_products_2[i].id %>}`);//set add button id
+    removeProduct_Btn<%- available_products_2[i].id %>.setAttribute("id", `remove-product-${<%- available_products_2[i].id %>}`);//set remove button id
+    productQuantity<%- available_products_2[i].id %>.setAttribute("id", `product-quantity-${<%- available_products_2[i].id %>}`);//set product quantity id
+    
+    //=================
+    var PRODUCT_QUANTITY<%- available_products_2[i].id %> = 0;
+    var ID<%- available_products_2[i].id %> = <%- available_products_2[i].id %> ;
+    var addOrRemove_Counter<%- available_products_2[i].id %> = 0;
+    var PRICE<%- available_products_2[i].id %> = <%- available_products_2[i].price %> ;
+    var isAlreadyZero<%- available_products_2[i].id %>;
+    //=================
+    
+    addProduct_Btn<%- available_products_2[i].id %>.onclick = ()=>{
+        isAlreadyZero<%- available_products_2[i].id %> = false;
+        PRODUCT_QUANTITY<%- available_products_2[i].id %>++; addOrRemove_Counter<%- available_products_2[i].id %> = 1;
+        productQuantity<%- available_products_2[i].id %>.innerHTML = PRODUCT_QUANTITY<%- available_products_2[i].id %>;
+        updateProduct<%- available_products_2[i].id %>(addOrRemove_Counter<%- available_products_2[i].id %>)
+        addOrRemoveType<%- available_products_2[i].id %>(PRODUCT_QUANTITY<%- available_products_2[i].id %> , "add");
+    }
+    removeProduct_Btn<%- available_products_2[i].id %>.onclick = ()=>{
+        isAlreadyZero<%- available_products_2[i].id %> = true;
+        addOrRemove_Counter<%- available_products_2[i].id %> = 0;
+        if (PRODUCT_QUANTITY<%- available_products_2[i].id %> != 0) {isAlreadyZero<%- available_products_2[i].id %> = false; PRODUCT_QUANTITY<%- available_products_2[i].id %>--;  addOrRemove_Counter<%- available_products_2[i].id %> = -1};
+        productQuantity<%- available_products_2[i].id %>.innerHTML = PRODUCT_QUANTITY<%- available_products_2[i].id %>;
+        updateProduct<%- available_products_2[i].id %>(addOrRemove_Counter<%- available_products_2[i].id %>);
+        console.log(isThere<%- available_products_2[i].id %>(ID<%- available_products_2[i].id %>))
+        if(isThere<%- available_products_2[i].id %>(ID<%- available_products_2[i].id %>) == false){localStorage.removeItem(ID<%- available_products_2[i].id %>)};
+        addOrRemoveType<%- available_products_2[i].id %>(PRODUCT_QUANTITY<%- available_products_2[i].id %> , "remove");
+    }
+    //=================
+    
+    //=================
+    function updateProduct<%- available_products_2[i].id %>(addOrRemoveByOne){
+        var TOTAL_QUANTITY = parseInt(localStorage.getItem("totalQuantity"));
+        var product = {"title": `${productTitle<%- available_products_2[i].id %>}`, "quantity": PRODUCT_QUANTITY<%- available_products_2[i].id %> , "price": PRODUCT_QUANTITY<%- available_products_2[i].id %>*PRICE<%- available_products_2[i].id %>}
+        localStorage.setItem(ID<%- available_products_2[i].id %> , JSON.stringify(product));
+    
+        localStorage.setItem("totalQuantity" , TOTAL_QUANTITY + addOrRemoveByOne);
+        console.log(`Total Quantity: ${localStorage.getItem("totalQuantity")}`);
+    }
+    //=============
+    function isThere<%- available_products_2[i].id %>(someID){
+        
+        if (JSON.parse(localStorage.getItem(ID<%- available_products_2[i].id %>)).quantity > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //==========
+    function addOrRemoveType<%- available_products_2[i].id %>(productQuantityProvidedHere , keyProvidedHere){
+        var initialNumberOfTypes = parseInt(localStorage.getItem("numberOfTypesOfProducts"));
+        
+        if(productQuantityProvidedHere == 0){
+            if(!isAlreadyZero<%- available_products_2[i].id %>){
+                localStorage.setItem("numberOfTypesOfProducts" , initialNumberOfTypes - 1);
+            }
+        }else{
+            if(productQuantityProvidedHere == 1 && keyProvidedHere == "add"){
+                localStorage.setItem("numberOfTypesOfProducts" , initialNumberOfTypes + 1);
+            }
+        }
+    }
+    
+    
+    
+    
+    </script>
+
+<%} %>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- scripts -->
+

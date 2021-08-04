@@ -1,0 +1,146 @@
+<head>
+    <style>
+        *{
+            transition: 0.3s;
+        }
+        body{
+            background-color: black;
+            color: white;
+        }
+        section{
+            width: 90%;
+            border-radius: 20px;
+            padding: 20px;
+            border: solid white 2px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        #products-section article div{
+            margin: 0 20px;
+            text-align: center;
+
+        }
+    </style>
+</head>
+<body>
+    <button id="refresh">تحديث</button>
+<section id="products-section">
+    <article id="column" style="justify-content: center; top: 0%; margin-bottom: 50px;">
+    <!-- <div id="total-price-list" style="width: 15%;">المجموع</div>
+        <div id="quantity-list" style="width: 10%;">الكمية</div>
+        <div id="price-list" style="width: 15%;">السعر</div>
+        <div id="items-list" style="width: 60%;">المنتج</div> 
+    -->
+
+    <table dir="rtl" id="items-table" style="width: 100%; border-bottom: white 1px solid;">
+        <tr style="font-size: 15px; font-family: monospace;">
+            <th style="width: 60%; padding-bottom: 20px;">المنتج</th>
+            <th style="width: 15%; padding-bottom: 20px;">السعر</th>
+            <th style="width: 10%; padding-bottom: 20px;">الكمية</th>
+            <th style="width: 15%; padding-bottom: 20px;">المجموع</th>
+        </tr>
+    </table>
+    </article>
+
+
+</section>
+
+<section id="location-section">
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        window.location.href = "/final";
+
+const refresh_Btn = document.getElementById("refresh");
+// var items_list = document.getElementById("items-list");
+// var price_list = document.getElementById("price-list");
+// var total_price_list = document.getElementById("total-price-list");
+// var quantity_list = document.getElementById("quantity-list");
+var DELIVERY_CHARGE = 15;
+var CART = [];
+
+
+refresh_Btn.onclick = ()=>{
+    
+    updateCart();
+    
+    
+}
+
+
+
+
+
+function updateCart(){
+    if(localStorage.getItem("products") != ""|null|[]){
+    CART = [];
+    //delete rows...
+    CART = removeQuotation(localStorage.getItem("products"));
+    for(i=0;  i < CART.length; i++){
+        if(document.getElementById(`item-row-${i}`) == null|undefined){
+
+            var item_row = document.createElement("tr");
+            item_row.setAttribute("id", `item-row-${i}`)
+            item_row.style.fontSize = "12px";
+            item_row.style.paddingBottom = "10px";
+            document.getElementById("items-table").appendChild(item_row);
+
+        var item = document.createElement("th")
+        item_row.appendChild(item)
+        item.innerHTML = CART[i].title;
+
+        var price = document.createElement("th")
+        item_row.appendChild(price)
+        price.innerHTML = (CART[i].price)/(CART[i].quantity);
+
+        var quantity = document.createElement("th")
+        item_row.appendChild(quantity)
+        quantity.innerHTML = CART[i].quantity;
+
+
+        var totalPrice = document.createElement("th")
+        item_row.appendChild(totalPrice)
+        totalPrice.innerHTML = CART[i].price;
+
+    }
+    }
+    var delivery_row = document.createElement("tr");
+    document.getElementById("items-table").appendChild(delivery_row);
+    
+    var delivery_label = document.createElement("th")
+        delivery_row.appendChild(delivery_label)
+        delivery_label.style.paddingTop = "10px";
+        delivery_label.innerHTML = "التوصيل";
+
+        var delivery_charge = document.createElement("th")
+        delivery_row.appendChild(delivery_charge)
+        delivery_charge.setAttribute("colspan",3);
+        delivery_charge.style.paddingLeft = "6%";
+        delivery_charge.style.paddingTop = "10px";
+        delivery_charge.innerHTML = DELIVERY_CHARGE;
+
+        localStorage.setItem("deliveryCharge" , DELIVERY_CHARGE)
+}
+
+}
+
+
+function removeQuotation(stringified){
+    var unstringified = (new Function( "return [" + stringified + "]")());
+    return unstringified;
+}
+
+    </script>
+</body>
